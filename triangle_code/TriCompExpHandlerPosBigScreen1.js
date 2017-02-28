@@ -311,29 +311,29 @@ function drawTriangle() {
 	// Drawing the randomly moving dots
 	var Dot1Path= paper.path("M TriBaseXEnd-TriSideXLengthIn TriBaseYPos-TriSideYLengthUp ").attr({
 		id: "path1", fill: "none",strokeWidth: "0", stroke: "#ffffff", strokeMiterLimit: "10", strokeDasharray: "9 9", strokeDashOffset: "988.01" });
-	Dot2Path=;
-	Dot3Path=;
-	Dot4Path=;
-	Dot5Path=;
-	Dot6Path=;
-	Dot7Path=;
-	Dot8Path=;
-	Dot9Path=;
-	Dot10Path=;
-	Dot11Path=;
-	Dot12Path=;
-	Dot13Path=;
-	Dot14Path=;
-	Dot15Path=;
-	Dot16Path=;
-	Dot17Path=;
-	Dot18Path=;
-	Dot19Path=;
-	Dot20Path=;
-	Dot21Path=;
-	Dot22Path=;
-	Dot23Path=;
-	Dot24Path=;
+	// Dot2Path=;
+	// Dot3Path=;
+	// Dot4Path=;
+	// Dot5Path=;
+	// Dot6Path=;
+	// Dot7Path=;
+	// Dot8Path=;
+	// Dot9Path=;
+	// Dot10Path=;
+	// Dot11Path=;
+	// Dot12Path=;
+	// Dot13Path=;
+	// Dot14Path=;
+	// Dot15Path=;
+	// Dot16Path=;
+	// Dot17Path=;
+	// Dot18Path=;
+	// Dot19Path=;
+	// Dot20Path=;
+	// Dot21Path=;
+	// Dot22Path=;
+	// Dot23Path=;
+	// Dot24Path=;
 
 	// Next Page button
 	var ButtonPosX=TriBaseXEndOrig;
