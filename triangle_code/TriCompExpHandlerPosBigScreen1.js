@@ -172,28 +172,116 @@ function animateAlongPath( path, element, start, dur ) {
 // Here the slider ends
 
 // Function that handles the first training triangle (teach subjects how to move the dots and angle)
+// function trainTriangle() {
+// 	//alert('drawTriangle'+Global_info.curPage)
+// 	$('#triangleTrain').empty();
+
+// 	var paper2 = Snap("#triangleTrain").attr({width:"3000",height:"2500"});
+// 	var StrkWdth=2;
+
+// 	// drawing the triangle
+// 	//parameters of the run:
+// 	var LengthAngleSideOrig=400;
+// 	var AngleOrig=Math.PI/4; //Size of angle in radians - 45 deg
+// 	var LengthBaseOrig=1900; //Max Base Length
+// 	var BaseLengthFactor=0.6; //Get the current percent of side length from Global_info.sideRunNum
+// 	var BaseLength=LengthBaseOrig*BaseLengthFactor;
+
+// 	var TriBaseXStartOrig=400; //Origin position in the X axis for maximal base length
+// 	var TriBaseXEndOrig=LengthBaseOrig+TriBaseXStartOrig; //End position of base for maximal base length
+
+// 	var TriBaseXStart=TriBaseXStartOrig+0.5*(1-BaseLengthFactor)*LengthBaseOrig;
+// 	var TriBaseXEnd=TriBaseXStart+BaseLength;
+// 	var TriBaseYPos=LengthBaseOrig+300;
+// 	var TriSideXLengthIn=LengthAngleSideOrig*BaseLengthFactor;
+// 	var TriSideYLengthUp=Math.tan(AngleOrig)*LengthAngleSideOrig*BaseLengthFactor;
+// //	var triBase = paper2.line(TriBaseXStart,TriBaseYPos,TriBaseXEnd,TriBaseYPos).attr({strokeWidth:5,stroke:"black",strokeLinecap:"round"});
+
+// 	//drawing the real location of the third vertex
+// 	var realPosition=paper2.circle(TriBaseXStart+0.5*BaseLength,TriBaseYPos-Math.tan(AngleOrig)*0.5*BaseLength,8).attr({fill:"lightblue"});
+
+
+// 	//drawing the triangle
+// 	var triBaseLeft = paper2.line(TriBaseXStart,TriBaseYPos,TriBaseXStart+TriSideXLengthIn*1.3,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+// 	var triBaseRight = paper2.line(TriBaseXEnd,TriBaseYPos,TriBaseXEnd-TriSideXLengthIn*1.3,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+// 	var triRightSide = paper2.line(TriBaseXEnd,TriBaseYPos,TriBaseXEnd-TriSideXLengthIn,TriBaseYPos-TriSideYLengthUp).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+// 	var triLeftSide = paper2.line(TriBaseXStart,TriBaseYPos,TriBaseXStart+TriSideXLengthIn,TriBaseYPos-TriSideYLengthUp).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+
+// 	//drawing the third vertex
+// 	var thrdVrtxPosX=TriBaseXStartOrig+200;
+// 	var thrdVrtxPosY=1000;
+// 	var thrdVrtxTxt=paper2.text(thrdVrtxPosX-140,thrdVrtxPosY-30,"Move dot to the 3rd vertex position (marked in light blue)").attr({"font-size": "30px"});
+// 	var dotSize=5;
+// 	var thirdVertex = paper2.circle(thrdVrtxPosX,thrdVrtxPosY,dotSize).attr({fill:"firebrick"});
+
+// 	// paper2.circle(100, 100, 5);
+
+// 	thirdVertex.drag(function(dx,dy){
+// 		thirdVertex.attr({cx:+x+dx,cy:+y+dy});
+// 	},function(){
+// 		x = thirdVertex.attr("cx");
+// 		y = thirdVertex.attr("cy");
+// 	},function(){
+// 	});
+
+// 	// Inserting a request to make sure the size of the screen fits the experiment
+// 	var FitScreenTxt=paper2.text(thrdVrtxPosX+400,thrdVrtxPosY,"Please set the screen size by pressing CNTL+'-' to 75% zoom").attr({"font-size": "30px",fill: "#900"});
+// //	var FitScreenTxt2=paper2.text(thrdVrtxPosX+200,thrdVrtxPosY+30,"you can see the top of the page and the continue botton").attr({"font-size": "20px",fill: "#900",});
+
+// 	// Next Page button
+// 	var ButtonPosX=TriBaseXEndOrig;
+// 	var ButtonPosY=TriBaseYPos+50;
+// 	var NextButtonTxt = paper2.text(ButtonPosX,ButtonPosY,"Continue").attr({fontsize:50});
+// 	var NextButtonRect = paper2.rect(ButtonPosX-20,ButtonPosY-20,120,30,5,5).attr({strokeWidth:5,stroke:"black",strokeLinecap:"round",fill:"lightblue"});
+// 	var groupButton = paper2.g(NextButtonRect,NextButtonTxt);
+// 	groupButton.mouseover(function(){
+//     this.attr({cursor: 'pointer'});
+// 	});
+
+// 	groupButton.click(function(){
+
+// 	/*var leftVec= {
+// 		x: lineLeft.attr("x2")-lineLeft.attr("x1"),
+// 		y: lineLeft.attr("y2")-lineLeft.attr("y1")
+// 	};
+// 	var rightVec={
+// 		x: lineRight.attr("x2")-lineRight.attr("x1"),
+// 		y: lineRight.attr("y2")-lineRight.attr("y1")
+// 	};*/
+// 	var angleValue=90;
+// 	if ((thirdVertex.attr("cx")==thrdVrtxPosX)||(thirdVertex.attr("cy")==thrdVrtxPosY)||(Math.abs(Math.round(angleValue))==180)) {
+// 		alert('Please position the third vertex \n by dragging the dot to its position \n before continuing to the next page');
+// 	} else {
+// //	alert('The x coordinate of the third vertex is: '+thirdVertex.attr("cx")+'\n'+'The y coordinate of the third vertex is: '+thirdVertex.attr("cy")+'\n'+'The angle is: '+Math.abs(Math.round(angleValue))+' degrees');
+// 	Global_info.setup='TrainingTrial';
+// 	Global_info.userResponse=thirdVertex.attr("cx")+'_'+thirdVertex.attr("cy")+'_'+Math.abs(Math.round(angleValue));
+// 	onNext();};
+// 	});
+// };
+
 function trainTriangle() {
 	//alert('drawTriangle'+Global_info.curPage)
 	$('#triangleTrain').empty();
 
-	var paper2 = Snap("#triangleTrain").attr({width:"3000",height:"2500"});
-
+	var paper2 = Snap("#triangleTrain").attr({width:$(window).width(), height:$(window).height()});
 	var StrkWdth=2;
-
+	var dimx = $(window).width();
+	var dimy = $(window).height();
 	// drawing the triangle
 	//parameters of the run:
-	var LengthAngleSideOrig=400;
+	var LengthBaseOrig=dimx*.9; //Max Base Length
+	var LengthAngleSideOrig=LengthBaseOrig*.1;
 	var AngleOrig=Math.PI/4; //Size of angle in radians - 45 deg
-	var LengthBaseOrig=1900; //Max Base Length
-	var BaseLengthFactor=0.6; //Get the current percent of side length from Global_info.sideRunNum
+	var height = Math.tan(AngleOrig)*.5*LengthBaseOrig;
+	var BaseLengthFactor=1; //Get the current percent of side length from Global_info.sideRunNum
 	var BaseLength=LengthBaseOrig*BaseLengthFactor;
 
-	var TriBaseXStartOrig=400; //Origin position in the X axis for maximal base length
+	var TriBaseXStartOrig=dimx*.05; //Origin position in the X axis for maximal base length
 	var TriBaseXEndOrig=LengthBaseOrig+TriBaseXStartOrig; //End position of base for maximal base length
 
 	var TriBaseXStart=TriBaseXStartOrig+0.5*(1-BaseLengthFactor)*LengthBaseOrig;
 	var TriBaseXEnd=TriBaseXStart+BaseLength;
-	var TriBaseYPos=LengthBaseOrig+300;
+	var TriBaseYPos=(dimy - height)*.5+height;
 	var TriSideXLengthIn=LengthAngleSideOrig*BaseLengthFactor;
 	var TriSideYLengthUp=Math.tan(AngleOrig)*LengthAngleSideOrig*BaseLengthFactor;
 //	var triBase = paper2.line(TriBaseXStart,TriBaseYPos,TriBaseXEnd,TriBaseYPos).attr({strokeWidth:5,stroke:"black",strokeLinecap:"round"});
@@ -209,10 +297,12 @@ function trainTriangle() {
 	var triLeftSide = paper2.line(TriBaseXStart,TriBaseYPos,TriBaseXStart+TriSideXLengthIn,TriBaseYPos-TriSideYLengthUp).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
 
 	//drawing the third vertex
-	var thrdVrtxPosX=TriBaseXStartOrig+200;
-	var thrdVrtxPosY=1000;
-	var thrdVrtxTxt=paper2.text(thrdVrtxPosX-140,thrdVrtxPosY-30,"Move dot to the 3rd vertex position (marked in light blue)").attr({"font-size": "30px"});
-	var dotSize=5;
+	var textPosX = 10;
+	var textPosY = 10;
+	var thrdVrtxPosX= textPosX+10;
+	var thrdVrtxPosY=textPosY+10;
+	var thrdVrtxTxt=paper2.text(textPosX, textPosY, "Move dot to the 3rd vertex position (marked in light blue)").attr({"font-size": "12px"});
+	var dotSize=3;
 	var thirdVertex = paper2.circle(thrdVrtxPosX,thrdVrtxPosY,dotSize).attr({fill:"firebrick"});
 
 	// paper2.circle(100, 100, 5);
@@ -226,14 +316,14 @@ function trainTriangle() {
 	});
 
 	// Inserting a request to make sure the size of the screen fits the experiment
-	var FitScreenTxt=paper2.text(thrdVrtxPosX+400,thrdVrtxPosY,"Please set the screen size by pressing CNTL+'-' to 75% zoom").attr({"font-size": "30px",fill: "#900"});
+	var FitScreenTxt=paper2.text(thrdVrtxPosX+400,thrdVrtxPosY,"Please set the screen size by pressing CNTL+'-' to 75% zoom").attr({"font-size": "12px",fill: "#900"});
 //	var FitScreenTxt2=paper2.text(thrdVrtxPosX+200,thrdVrtxPosY+30,"you can see the top of the page and the continue botton").attr({"font-size": "20px",fill: "#900",});
 
 	// Next Page button
-	var ButtonPosX=TriBaseXEndOrig;
-	var ButtonPosY=TriBaseYPos+50;
-	var NextButtonTxt = paper2.text(ButtonPosX,ButtonPosY,"Continue").attr({fontsize:50});
-	var NextButtonRect = paper2.rect(ButtonPosX-20,ButtonPosY-20,120,30,5,5).attr({strokeWidth:5,stroke:"black",strokeLinecap:"round",fill:"lightblue"});
+	var ButtonPosX=dimx;
+	var ButtonPosY=20;
+	var NextButtonTxt = paper2.text(ButtonPosX-120, ButtonPosY+20,"Continue").attr({fontsize:50});
+	var NextButtonRect = paper2.rect(ButtonPosX-120-20, ButtonPosY,120,30,5,5).attr({strokeWidth:5,stroke:"black",strokeLinecap:"round",fill:"lightblue"});
 	var groupButton = paper2.g(NextButtonRect,NextButtonTxt);
 	groupButton.mouseover(function(){
     this.attr({cursor: 'pointer'});
@@ -241,14 +331,6 @@ function trainTriangle() {
 
 	groupButton.click(function(){
 
-	/*var leftVec= {
-		x: lineLeft.attr("x2")-lineLeft.attr("x1"),
-		y: lineLeft.attr("y2")-lineLeft.attr("y1")
-	};
-	var rightVec={
-		x: lineRight.attr("x2")-lineRight.attr("x1"),
-		y: lineRight.attr("y2")-lineRight.attr("y1")
-	};*/
 	var angleValue=90;
 	if ((thirdVertex.attr("cx")==thrdVrtxPosX)||(thirdVertex.attr("cy")==thrdVrtxPosY)||(Math.abs(Math.round(angleValue))==180)) {
 		alert('Please position the third vertex \n by dragging the dot to its position \n before continuing to the next page');
@@ -260,36 +342,94 @@ function trainTriangle() {
 	});
 };
 
-// 
-var LengthAngleSideOrig = 400;
-var LengthBaseOrig = 2000;
-var TriBaseXStartOrig = 400;
-var TriBaseXEndOrig = LengthBaseOrig+TriBaseXStartOrig;
-var timeout = 10000; // timeout in milliseconds
+// var dimx = $(window).width();
+// var dimy = $(window).height();
+// var LengthBaseOrig=dimx*.9; //Max Base Length
+// var LengthAngleSideOrig=LengthBaseOrig*.1;
+// var TriBaseXStartOrig=dimx*.05; //Origin position in the X axis for maximal base length
+// var TriBaseXEndOrig=LengthBaseOrig+TriBaseXStartOrig; //End position of base for maximal base length
 
-// Should be named initializePage() but will name it drawTriangle for testing
 function drawTriangle() {
-	// draws the corners of the triangle and returns the elements
-	// dim_array = setInitialValues();
+	var timeout=10000;
+	//alert('drawTriangle'+Global_info.curPage)
 	$('#triangle').empty();
-	var paper = Snap("#triangle").attr({width:"3000",height:"2500"});
-	// var paper = Snap("#triangle").attr({width: dim_array[0], height: dim_array[1]});
-  // console.log($(window).width());
-  // console.log($(window).height());
 
-  var AngleOrig=TriBaseAngleArray[Math.floor(Global_info.angleRunNum%3)]; //Size of angle in radians
-  // var LengthBaseOrig=1900; //Max Base Length
-  // var TriBaseXStartOrig=400; //Origin position in the X axis for maximal base length
-  // var TriBaseXEndOrig=LengthBaseOrig+TriBaseXStartOrig; //End position of base for maximal base length
-  var BaseLengthFactor=TriBaseLengthPerArray[Math.floor(Global_info.sideRunNum%5)];//TriBaseLengthPerArray[Global_info.sideRunNum]; //Get the current percent of side length from Global_info.sideRunNum
+	var paper = Snap("#triangle").attr({width:$(window).width(),height:$(window).height()});
 
-  // drawTriangle2(paper, LengthAngleSideOrig, AngleOrig, LengthBaseOrig, TriBaseXStartOrig, TriBaseXEndOrig, BaseLengthFactor);
-  var sides_array = drawTriangle2(paper, AngleOrig, BaseLengthFactor)
-  var thirdVertex = drawVertex(paper, TriBaseXStartOrig);
+//	var TriBaseLengthPerArray=[1, 0.5, 0.25 ,0.08 ,0.02];
+	var TriBaseLengthPerArray=[1, 0.64, 0.32 ,0.16 ,0.04];
+//	var TriBaseAngleArray=[Math.PI/5, 17*Math.PI/60, 11*Math.PI/30];
+	var TriBaseAngleArray=[Math.PI/6, Math.PI/5, Math.PI/4];
 
-  // var TriBaseYPos = LengthBaseOrig+300;
-  var TriBaseYPos = LengthBaseOrig+300;
-	drawButton(paper, TriBaseYPos, thirdVertex, AngleOrig, BaseLengthFactor);
+	var StrkWdth=2;
+	var dimx = $(window).width();
+	var dimy = $(window).height();
+
+	var LengthBaseOrig=dimx*.9; //Max Base Length
+	var LengthAngleSideOrig=LengthBaseOrig*.1;
+	var AngleOrig=TriBaseAngleArray[Math.floor(Global_info.angleRunNum%3)]; //Size of angle in radians - 45 deg
+	var height = Math.tan(AngleOrig)*.5*LengthBaseOrig;
+	var BaseLengthFactor=TriBaseLengthPerArray[Math.floor(Global_info.sideRunNum%5)]; //Get the current percent of side length from Global_info.sideRunNum
+	var BaseLength=LengthBaseOrig*BaseLengthFactor;
+
+	var TriBaseXStartOrig=dimx*.05; //Origin position in the X axis for maximal base length
+	var TriBaseXEndOrig=LengthBaseOrig+TriBaseXStartOrig; //End position of base for maximal base length
+
+	var TriBaseXStart=TriBaseXStartOrig+0.5*(1-BaseLengthFactor)*LengthBaseOrig;
+	var TriBaseXEnd=TriBaseXStart+BaseLength;
+	var TriBaseYPos=(dimy - height)*.5+height;
+
+	var TriSideXLengthIn=LengthAngleSideOrig*BaseLengthFactor;
+	var TriSideYLengthUp=Math.tan(AngleOrig)*TriSideXLengthIn;
+//	var triBase = paper.line(TriBaseXStart,TriBaseYPos,TriBaseXEnd,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+
+	//drawing the triangle
+	var triBaseLeft = paper.line(TriBaseXStart,TriBaseYPos,TriBaseXStart+TriSideXLengthIn*1.3,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+	var triBaseRight = paper.line(TriBaseXEnd,TriBaseYPos,TriBaseXEnd-TriSideXLengthIn*1.3,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+	var triRightSide = paper.line(TriBaseXEnd,TriBaseYPos,TriBaseXEnd-TriSideXLengthIn,TriBaseYPos-TriSideYLengthUp).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+	var triLeftSide = paper.line(TriBaseXStart,TriBaseYPos,TriBaseXStart+TriSideXLengthIn,TriBaseYPos-TriSideYLengthUp).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+
+	var sides_array = [triBaseLeft, triBaseRight, triRightSide, triLeftSide];
+	//drawing the third vertex
+	var textPosX = 10;
+	var textPosY = 10;
+	var thrdVrtxPosX= textPosX+10;
+	var thrdVrtxPosY=textPosY+10;
+	var thrdVrtxTxt=paper.text(textPosX, textPosY, "Move dot to the 3rd vertex position (marked in light blue)").attr({"font-size": "12px"});
+	var dotSize=3;
+	var thirdVertex = paper.circle(thrdVrtxPosX,thrdVrtxPosY,dotSize).attr({fill:"firebrick"});
+
+	thirdVertex.drag(function(dx,dy){
+		thirdVertex.attr({cx:+x+dx,cy:+y+dy});
+	},function(){
+		x = thirdVertex.attr("cx");
+		y = thirdVertex.attr("cy");
+	},function(){
+	});
+
+
+	var ButtonPosX=dimx;
+	var ButtonPosY=20;
+	var NextButtonTxt = paper.text(ButtonPosX-120, ButtonPosY+20,"Continue").attr({fontsize:50});
+	var NextButtonRect = paper.rect(ButtonPosX-120-20, ButtonPosY,120,30,5,5).attr({strokeWidth:5,stroke:"black",strokeLinecap:"round",fill:"lightblue"});
+	var groupButton = paper.g(NextButtonRect,NextButtonTxt);
+
+	groupButton.mouseover(function(){
+    this.attr({cursor: 'pointer'});
+	});
+	groupButton.click(function(){
+		var angleValue=90;
+
+		if ((thirdVertex.attr("cx")==thrdVrtxPosX)||(thirdVertex.attr("cy")==thrdVrtxPosY)||(Math.abs(Math.round(angleValue))==180)) {
+			alert('Please position the third vertex \n by dragging the dot to its position \n before continuing to the next page');
+		} 
+		else {
+	//	alert('The x coordinate of the third vertex is: '+thirdVertex.attr("cx")+'\n'+'The y coordinate of the third vertex is: '+thirdVertex.attr("cy")+'\n'+'The angle is: '+Math.abs(Math.round(angleValue))+' degrees');
+			Global_info.setup='Angle_'+Math.round(AngleOrig*180/Math.PI)+'_BaseFactor_'+BaseLengthFactor;
+			Global_info.userResponse=thirdVertex.attr("cx")+'_'+thirdVertex.attr("cy")+'_'+Math.abs(Math.round(angleValue));
+			onNext();}
+		;
+	});
 
 	var seconds = timeout/1000;
 	document.getElementById("timer").innerHTML = seconds+" seconds ";
@@ -299,15 +439,57 @@ function drawTriangle() {
 			sides_array[i].attr({strokeWidth: 0});
 		}
 	}, timeout);
+
 	var x = setInterval(function() {
 		seconds=seconds-1;
 		document.getElementById("timer").innerHTML = seconds+" seconds";
 		if (seconds == 0) {
 			clearInterval(x);
-			// document.getElementById("timer").innerHTML = "EXPIRED";
 		}
 	}, 1000);
-}
+};
+
+// Should be named initializePage() but will name it drawTriangle for testing
+// function drawTriangle() {
+// 	// draws the corners of the triangle and returns the elements
+// 	// dim_array = setInitialValues();
+// 	$('#triangle').empty();
+// 	var paper = Snap("#triangle").attr({width:dimx, height:dimy});
+// 	console.log(dimx);
+// 	console.log($(window).width());
+
+//   var AngleOrig=TriBaseAngleArray[Math.floor(Global_info.angleRunNum%3)]; //Size of angle in radians
+//   var height = Math.tan(AngleOrig)*.5*LengthBaseOrig;
+//   // var LengthBaseOrig=1900; //Max Base Length
+//   // var TriBaseXStartOrig=400; //Origin position in the X axis for maximal base length
+//   // var TriBaseXEndOrig=LengthBaseOrig+TriBaseXStartOrig; //End position of base for maximal base length
+//   var BaseLengthFactor=TriBaseLengthPerArray[Math.floor(Global_info.sideRunNum%5)];//TriBaseLengthPerArray[Global_info.sideRunNum]; //Get the current percent of side length from Global_info.sideRunNum
+
+//   // drawTriangle2(paper, LengthAngleSideOrig, AngleOrig, LengthBaseOrig, TriBaseXStartOrig, TriBaseXEndOrig, BaseLengthFactor);
+//   var sides_array = drawTriangle2(paper, AngleOrig, BaseLengthFactor)
+//   var thirdVertex = drawVertex(paper, TriBaseXStartOrig);
+
+//   // var TriBaseYPos = LengthBaseOrig+300;
+//   var TriBaseYPos=(dimy - height)*.5+height;
+// 	drawButton(paper, TriBaseYPos, thirdVertex, AngleOrig, BaseLengthFactor);
+
+// 	var seconds = timeout/1000;
+// 	document.getElementById("timer").innerHTML = seconds+" seconds ";
+
+// 	setTimeout(function() {
+// 		for (i=0; i<sides_array.length;i++) {
+// 			sides_array[i].attr({strokeWidth: 0});
+// 		}
+// 	}, timeout);
+// 	var x = setInterval(function() {
+// 		seconds=seconds-1;
+// 		document.getElementById("timer").innerHTML = seconds+" seconds";
+// 		if (seconds == 0) {
+// 			clearInterval(x);
+// 			// document.getElementById("timer").innerHTML = "EXPIRED";
+// 		}
+// 	}, 1000);
+// }
 
 
 function drawTriangle2(paper, AngleOrig, BaseLengthFactor) {
