@@ -414,39 +414,40 @@ function drawTriangle() {
 	var NextButtonRect = paper.rect(ButtonPosX-120-20, ButtonPosY,120,30,5,5).attr({strokeWidth:5,stroke:"black",strokeLinecap:"round",fill:"lightblue"});
 	var groupButton = paper.g(NextButtonRect,NextButtonTxt);
 
-	groupButton.mouseover(function(){
-    this.attr({cursor: 'pointer'});
+	var seconds = timeout/1000;
+
+    document.getElementById("timer").innerHTML = seconds+" seconds ";
+
+    setTimeout(function() {
+        for (i=0; i<sides_array.length;i++) {
+            sides_array[i].attr({strokeWidth: 0});
+        }
+    }, timeout);
+
+    var interval = setInterval(function() {
+        seconds=seconds-1;
+        document.getElementById("timer").innerHTML = seconds+" seconds";
+        if (seconds == 0) {
+            clearInterval(interval);
+        }
+    }, 1000);
+
+    groupButton.mouseover(function(){
+        this.attr({cursor: 'pointer'});
 	});
+
 	groupButton.click(function(){
 		var angleValue=90;
-
 		if ((thirdVertex.attr("cx")==thrdVrtxPosX)||(thirdVertex.attr("cy")==thrdVrtxPosY)||(Math.abs(Math.round(angleValue))==180)) {
 			alert('Please position the third vertex \n by dragging the dot to its position \n before continuing to the next page');
 		} 
 		else {
-	//	alert('The x coordinate of the third vertex is: '+thirdVertex.attr("cx")+'\n'+'The y coordinate of the third vertex is: '+thirdVertex.attr("cy")+'\n'+'The angle is: '+Math.abs(Math.round(angleValue))+' degrees');
 			Global_info.setup='Angle_'+Math.round(AngleOrig*180/Math.PI)+'_BaseFactor_'+BaseLengthFactor;
 			Global_info.userResponse=thirdVertex.attr("cx")+'_'+thirdVertex.attr("cy")+'_'+Math.abs(Math.round(angleValue));
-			onNext();}
-		;
+            clearInterval(interval);
+			onNext();
+        };
 	});
-
-	var seconds = timeout/1000;
-	document.getElementById("timer").innerHTML = seconds+" seconds ";
-
-	setTimeout(function() {
-		for (i=0; i<sides_array.length;i++) {
-			sides_array[i].attr({strokeWidth: 0});
-		}
-	}, timeout);
-
-	var x = setInterval(function() {
-		seconds=seconds-1;
-		document.getElementById("timer").innerHTML = seconds+" seconds";
-		if (seconds == 0) {
-			clearInterval(x);
-		}
-	}, 1000);
 };
 
 // Should be named initializePage() but will name it drawTriangle for testing
@@ -492,71 +493,70 @@ function drawTriangle() {
 // }
 
 
-function drawTriangle2(paper, AngleOrig, BaseLengthFactor) {
-	var StrkWdth=2;
+// function drawTriangle2(paper, AngleOrig, BaseLengthFactor) {
+// 	var StrkWdth=2;
 
-	// drawing the triangle
-	//parameters of the run:
+// 	// drawing the triangle
+// 	//parameters of the run:
 	
-  var BaseLength=LengthBaseOrig*BaseLengthFactor;
-  var TriBaseXStart=TriBaseXStartOrig+0.5*(1-BaseLengthFactor)*LengthBaseOrig;
-  console.log(BaseLengthFactor);
-	var TriBaseXEnd=TriBaseXStart+BaseLength;
-	var TriBaseYPos=LengthBaseOrig+300;
-	var TriSideXLengthIn=LengthAngleSideOrig*BaseLengthFactor;
-	var TriSideYLengthUp=Math.tan(AngleOrig)*TriSideXLengthIn;
-//	var triBase = paper.line(TriBaseXStart,TriBaseYPos,TriBaseXEnd,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+//   var BaseLength=LengthBaseOrig*BaseLengthFactor;
+//   var TriBaseXStart=TriBaseXStartOrig+0.5*(1-BaseLengthFactor)*LengthBaseOrig;
+// 	var TriBaseXEnd=TriBaseXStart+BaseLength;
+// 	var TriBaseYPos=LengthBaseOrig+300;
+// 	var TriSideXLengthIn=LengthAngleSideOrig*BaseLengthFactor;
+// 	var TriSideYLengthUp=Math.tan(AngleOrig)*TriSideXLengthIn;
+// //	var triBase = paper.line(TriBaseXStart,TriBaseYPos,TriBaseXEnd,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
 
-	//drawing the triangle
-	var triBaseLeft = paper.line(TriBaseXStart,TriBaseYPos,TriBaseXStart+TriSideXLengthIn*1.3,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
-	var triBaseRight = paper.line(TriBaseXEnd,TriBaseYPos,TriBaseXEnd-TriSideXLengthIn*1.3,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
-	var triRightSide = paper.line(TriBaseXEnd,TriBaseYPos,TriBaseXEnd-TriSideXLengthIn,TriBaseYPos-TriSideYLengthUp).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
-	var triLeftSide = paper.line(TriBaseXStart,TriBaseYPos,TriBaseXStart+TriSideXLengthIn,TriBaseYPos-TriSideYLengthUp).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
-	return [triBaseLeft, triBaseRight, triRightSide, triLeftSide];
-}
+// 	//drawing the triangle
+// 	var triBaseLeft = paper.line(TriBaseXStart,TriBaseYPos,TriBaseXStart+TriSideXLengthIn*1.3,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+// 	var triBaseRight = paper.line(TriBaseXEnd,TriBaseYPos,TriBaseXEnd-TriSideXLengthIn*1.3,TriBaseYPos).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+// 	var triRightSide = paper.line(TriBaseXEnd,TriBaseYPos,TriBaseXEnd-TriSideXLengthIn,TriBaseYPos-TriSideYLengthUp).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+// 	var triLeftSide = paper.line(TriBaseXStart,TriBaseYPos,TriBaseXStart+TriSideXLengthIn,TriBaseYPos-TriSideYLengthUp).attr({strokeWidth:StrkWdth,stroke:"black",strokeLinecap:"round"});
+// 	return [triBaseLeft, triBaseRight, triRightSide, triLeftSide];
+// }
 
-function drawVertex(paper, TriBaseXStartOrig) {
-	//drawing the third vertex
-	var thrdVrtxPosX=TriBaseXStartOrig+200;
-	var thrdVrtxPosY=1000;
-	var thrdVrtxTxt=paper.text(thrdVrtxPosX-140,thrdVrtxPosY-20,"Move dot to the top corner location").attr({"font-size": "25px"});
-	var dotSize=5;
-	var thirdVertex = paper.circle(thrdVrtxPosX,thrdVrtxPosY,dotSize).attr({fill:"firebrick"});
+// function drawVertex(paper, TriBaseXStartOrig) {
+// 	//drawing the third vertex
+// 	var thrdVrtxPosX=TriBaseXStartOrig+200;
+// 	var thrdVrtxPosY=1000;
+// 	var thrdVrtxTxt=paper.text(thrdVrtxPosX-140,thrdVrtxPosY-20,"Move dot to the top corner location").attr({"font-size": "25px"});
+// 	var dotSize=5;
+// 	var thirdVertex = paper.circle(thrdVrtxPosX,thrdVrtxPosY,dotSize).attr({fill:"firebrick"});
 
-	thirdVertex.drag(function(dx,dy){
-		thirdVertex.attr({cx:+x+dx,cy:+y+dy});
-	},function(){
-		x = thirdVertex.attr("cx");
-		y = thirdVertex.attr("cy");
-	},function(){
-	});
-    return thirdVertex;
-}
+// 	thirdVertex.drag(function(dx,dy){
+// 		thirdVertex.attr({cx:+x+dx,cy:+y+dy});
+// 	},function(){
+// 		x = thirdVertex.attr("cx");
+// 		y = thirdVertex.attr("cy");
+// 	},function(){
+// 	});
+//     return thirdVertex;
+// }
 
-function drawButton(paper, TriBaseYPos, thirdVertex, AngleOrig, BaseLengthFactor) {
-	var ButtonPosX=TriBaseXEndOrig;
-	var ButtonPosY=TriBaseYPos+50;
-  var thrdVrtxPosX=TriBaseXStartOrig+200;
-  var thrdVrtxPosY=1000;
-	var NextButtonTxt = paper.text(ButtonPosX,ButtonPosY,"Continue").attr({fontsize:50});
-	var NextButtonRect = paper.rect(ButtonPosX-20,ButtonPosY-20,120,30,5,5).attr({strokeWidth:5,stroke:"black",strokeLinecap:"round",fill:"lightblue"});
-	var groupButton = paper.g(NextButtonRect,NextButtonTxt);
-	groupButton.mouseover(function(){
-    this.attr({cursor: 'pointer'});
-	});
-	groupButton.click(function(){
+// function drawButton(paper, TriBaseYPos, thirdVertex, AngleOrig, BaseLengthFactor) {
+// 	var ButtonPosX=TriBaseXEndOrig;
+// 	var ButtonPosY=TriBaseYPos+50;
+//   var thrdVrtxPosX=TriBaseXStartOrig+200;
+//   var thrdVrtxPosY=1000;
+// 	var NextButtonTxt = paper.text(ButtonPosX,ButtonPosY,"Continue").attr({fontsize:50});
+// 	var NextButtonRect = paper.rect(ButtonPosX-20,ButtonPosY-20,120,30,5,5).attr({strokeWidth:5,stroke:"black",strokeLinecap:"round",fill:"lightblue"});
+// 	var groupButton = paper.g(NextButtonRect,NextButtonTxt);
+// 	groupButton.mouseover(function(){
+//     this.attr({cursor: 'pointer'});
+// 	});
+// 	groupButton.click(function(){
 
-	var angleValue=90;
+// 	var angleValue=90;
 
-	if ((thirdVertex.attr("cx")==thrdVrtxPosX)||(thirdVertex.attr("cy")==thrdVrtxPosY)||(Math.abs(Math.round(angleValue))==180)) {
-		alert('Please position the third vertex \n by dragging the dot to its position \n before continuing to the next page');
-	} else {
-//	alert('The x coordinate of the third vertex is: '+thirdVertex.attr("cx")+'\n'+'The y coordinate of the third vertex is: '+thirdVertex.attr("cy")+'\n'+'The angle is: '+Math.abs(Math.round(angleValue))+' degrees');
-	Global_info.setup='Angle_'+Math.round(AngleOrig*180/Math.PI)+'_BaseFactor_'+BaseLengthFactor;
-	Global_info.userResponse=thirdVertex.attr("cx")+'_'+thirdVertex.attr("cy")+'_'+Math.abs(Math.round(angleValue));
-	onNext();};
-	});
-}
+// 	if ((thirdVertex.attr("cx")==thrdVrtxPosX)||(thirdVertex.attr("cy")==thrdVrtxPosY)||(Math.abs(Math.round(angleValue))==180)) {
+// 		alert('Please position the third vertex \n by dragging the dot to its position \n before continuing to the next page');
+// 	} else {
+// //	alert('The x coordinate of the third vertex is: '+thirdVertex.attr("cx")+'\n'+'The y coordinate of the third vertex is: '+thirdVertex.attr("cy")+'\n'+'The angle is: '+Math.abs(Math.round(angleValue))+' degrees');
+// 	Global_info.setup='Angle_'+Math.round(AngleOrig*180/Math.PI)+'_BaseFactor_'+BaseLengthFactor;
+// 	Global_info.userResponse=thirdVertex.attr("cx")+'_'+thirdVertex.attr("cy")+'_'+Math.abs(Math.round(angleValue));
+// 	onNext();};
+// 	});
+// }
 
 function submit_demographis() {
 	var gender=document.getElementById("gender").options[document.getElementById("gender").selectedIndex].value;
