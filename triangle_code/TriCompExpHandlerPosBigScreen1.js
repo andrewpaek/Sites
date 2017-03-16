@@ -305,15 +305,26 @@ function trainTriangle() {
 	var dotSize=3;
 	var thirdVertex = paper2.circle(thrdVrtxPosX,thrdVrtxPosY,dotSize).attr({fill:"firebrick"});
 
-	// paper2.circle(100, 100, 5);
+    var backgroundCircle = paper2.circle(thrdVrtxPosX, thrdVrtxPosY, 15).attr({fill: "white", "fill-opacity": 0});
 
-	thirdVertex.drag(function(dx,dy){
-		thirdVertex.attr({cx:+x+dx,cy:+y+dy});
-	},function(){
-		x = thirdVertex.attr("cx");
-		y = thirdVertex.attr("cy");
-	},function(){
-	});
+    backgroundCircle.drag(function(dx,dy){
+        backgroundCircle.attr({cx:+x1+dx,cy:+y1+dy});
+        thirdVertex.attr({cx:+x2+dx, cy:+y2+dy})
+    },function(){
+        x1 = backgroundCircle.attr("cx");
+        y1 = backgroundCircle.attr("cy");
+        x2 = thirdVertex.attr("cx");
+        y2 = thirdVertex.attr("cy");
+    },function(){
+    });
+
+    backgroundCircle.mouseover(function(){
+        this.attr({fill: 'grey', "fill-opacity": 0.5});
+    });
+
+    backgroundCircle.mouseout(function(){
+        this.attr({fill: 'white', "fill-opacity": 0});
+    });
 
 	// Inserting a request to make sure the size of the screen fits the experiment
 	var FitScreenTxt=paper2.text(thrdVrtxPosX+400,thrdVrtxPosY,"Please set the screen size by pressing CNTL+'-' to 75% zoom").attr({"font-size": "12px",fill: "#900"});
@@ -325,20 +336,22 @@ function trainTriangle() {
 	var NextButtonTxt = paper2.text(ButtonPosX-120, ButtonPosY+20,"Continue").attr({fontsize:50});
 	var NextButtonRect = paper2.rect(ButtonPosX-120-20, ButtonPosY,120,30,5,5).attr({strokeWidth:5,stroke:"black",strokeLinecap:"round",fill:"lightblue"});
 	var groupButton = paper2.g(NextButtonRect,NextButtonTxt);
+
 	groupButton.mouseover(function(){
     this.attr({cursor: 'pointer'});
 	});
 
 	groupButton.click(function(){
 
-	var angleValue=90;
-	if ((thirdVertex.attr("cx")==thrdVrtxPosX)||(thirdVertex.attr("cy")==thrdVrtxPosY)||(Math.abs(Math.round(angleValue))==180)) {
-		alert('Please position the third vertex \n by dragging the dot to its position \n before continuing to the next page');
-	} else {
-//	alert('The x coordinate of the third vertex is: '+thirdVertex.attr("cx")+'\n'+'The y coordinate of the third vertex is: '+thirdVertex.attr("cy")+'\n'+'The angle is: '+Math.abs(Math.round(angleValue))+' degrees');
-	Global_info.setup='TrainingTrial';
-	Global_info.userResponse=thirdVertex.attr("cx")+'_'+thirdVertex.attr("cy")+'_'+Math.abs(Math.round(angleValue));
-	onNext();};
+    	var angleValue=90;
+    	if ((thirdVertex.attr("cx")==thrdVrtxPosX)||(thirdVertex.attr("cy")==thrdVrtxPosY)||(Math.abs(Math.round(angleValue))==180)) {
+    		alert('Please position the third vertex \n by dragging the dot to its position \n before continuing to the next page');
+    	} 
+        else {
+        	Global_info.setup='TrainingTrial';
+        	Global_info.userResponse=thirdVertex.attr("cx")+'_'+thirdVertex.attr("cy")+'_'+Math.abs(Math.round(angleValue));
+        	onNext();
+        };
 	});
 };
 
@@ -399,13 +412,26 @@ function drawTriangle() {
 	var dotSize=3;
 	var thirdVertex = paper.circle(thrdVrtxPosX,thrdVrtxPosY,dotSize).attr({fill:"firebrick"});
 
-	thirdVertex.drag(function(dx,dy){
-		thirdVertex.attr({cx:+x+dx,cy:+y+dy});
-	},function(){
-		x = thirdVertex.attr("cx");
-		y = thirdVertex.attr("cy");
-	},function(){
-	});
+    var backgroundCircle = paper.circle(thrdVrtxPosX, thrdVrtxPosY, 15).attr({fill: "white", "fill-opacity": 0});
+
+    backgroundCircle.drag(function(dx,dy){
+        backgroundCircle.attr({cx:+x1+dx,cy:+y1+dy});
+        thirdVertex.attr({cx:+x2+dx, cy:+y2+dy})
+    },function(){
+        x1 = backgroundCircle.attr("cx");
+        y1 = backgroundCircle.attr("cy");
+        x2 = thirdVertex.attr("cx");
+        y2 = thirdVertex.attr("cy");
+    },function(){
+    });
+
+    backgroundCircle.mouseover(function(){
+        this.attr({fill: 'grey', "fill-opacity": 0.5});
+    });
+
+    backgroundCircle.mouseout(function(){
+        this.attr({fill: 'white', "fill-opacity": 0});
+    });
 
 
 	var ButtonPosX=dimx;
@@ -418,12 +444,16 @@ function drawTriangle() {
 
     document.getElementById("timer").innerHTML = seconds+" seconds ";
 
-    setTimeout(function() {
+    var timeout = setTimeout(function() {
         for (i=0; i<sides_array.length;i++) {
             sides_array[i].attr({strokeWidth: 0});
         }
+        thirdVertex.attr({"fill": "white"});
+        times_up = true;
+        alert('Time is up. Please hit the continue button');
     }, timeout);
 
+    times_up = false;
     var interval = setInterval(function() {
         seconds=seconds-1;
         document.getElementById("timer").innerHTML = seconds+" seconds";
@@ -438,13 +468,14 @@ function drawTriangle() {
 
 	groupButton.click(function(){
 		var angleValue=90;
-		if ((thirdVertex.attr("cx")==thrdVrtxPosX)||(thirdVertex.attr("cy")==thrdVrtxPosY)||(Math.abs(Math.round(angleValue))==180)) {
+		if (((thirdVertex.attr("cx")==thrdVrtxPosX)||(thirdVertex.attr("cy")==thrdVrtxPosY)||(Math.abs(Math.round(angleValue))==180)) && !times_up) {
 			alert('Please position the third vertex \n by dragging the dot to its position \n before continuing to the next page');
-		} 
+		}
 		else {
 			Global_info.setup='Angle_'+Math.round(AngleOrig*180/Math.PI)+'_BaseFactor_'+BaseLengthFactor;
 			Global_info.userResponse=thirdVertex.attr("cx")+'_'+thirdVertex.attr("cy")+'_'+Math.abs(Math.round(angleValue));
             clearInterval(interval);
+            clearTimeout(timeout);
 			onNext();
         };
 	});
