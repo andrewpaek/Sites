@@ -301,7 +301,7 @@ function trainTriangle() {
 	var textPosY = 10;
 	var thrdVrtxPosX= textPosX+10;
 	var thrdVrtxPosY=textPosY+10;
-	var thrdVrtxTxt=paper2.text(textPosX, textPosY, "Move dot to the 3rd vertex position (marked in light blue)").attr({"font-size": "12px"});
+	var thrdVrtxTxt=paper2.text(textPosX, textPosY, "Move dot to the 3rd vertex position (marked in light blue)").attr({"font-size": "15px"});
 	var dotSize=3;
 	var thirdVertex = paper2.circle(thrdVrtxPosX,thrdVrtxPosY,dotSize).attr({fill:"firebrick"});
 
@@ -325,10 +325,6 @@ function trainTriangle() {
     backgroundCircle.mouseout(function(){
         this.attr({fill: 'white', "fill-opacity": 0});
     });
-
-	// Inserting a request to make sure the size of the screen fits the experiment
-	var FitScreenTxt=paper2.text(thrdVrtxPosX+400,thrdVrtxPosY,"Please set the screen size by pressing CNTL+'-' to 75% zoom").attr({"font-size": "12px",fill: "#900"});
-//	var FitScreenTxt2=paper2.text(thrdVrtxPosX+200,thrdVrtxPosY+30,"you can see the top of the page and the continue botton").attr({"font-size": "20px",fill: "#900",});
 
 	// Next Page button
 	var ButtonPosX=dimx;
@@ -410,7 +406,7 @@ function drawTriangle() {
 	var textPosY = 10;
 	var thrdVrtxPosX= textPosX+10;
 	var thrdVrtxPosY=textPosY+10;
-	var thrdVrtxTxt=paper.text(textPosX, textPosY, "Move dot to the 3rd vertex position (marked in light blue)").attr({"font-size": "12px"});
+	var thrdVrtxTxt=paper.text(textPosX, textPosY, "Move dot to the 3rd vertex position (marked in light blue)").attr({"font-size": "15px"});
 	var dotSize=3;
 	var thirdVertex = paper.circle(thrdVrtxPosX,thrdVrtxPosY,dotSize).attr({fill:"firebrick"});
 
@@ -476,6 +472,8 @@ function drawTriangle() {
 		else {
 			Global_info.setup='Angle_'+Math.round(AngleOrig*180/Math.PI)+'_BaseFactor_'+BaseLengthFactor;
 			Global_info.userResponse=thirdVertex.attr("cx")+'_'+thirdVertex.attr("cy")+'_'+Math.abs(Math.round(angleValue));
+            // saved_while_moving: 1 for true if the user was not successful in hitting continue due to timer interruption
+            Global_info.timeout = Number(times_up);
             clearInterval(interval);
             clearTimeout(timeout);
 			onNext();
@@ -704,7 +702,7 @@ function onNext(){
 		//Measuring the time it took the subject to solve the last page
 		Global_info.end=Date.now();
 		var timeRound =Global_info.end-Global_info.start;
-		var logInfo = 'Run'+Global_info.curPage+'_'+Global_info.setup+'_Time_'+timeRound+'_UserResponse_'+Global_info.userResponse;
+		var logInfo = 'Run'+Global_info.curPage+'_'+Global_info.setup+'_Time_'+timeRound+'_UserResponse_'+Global_info.userResponse+'_timeout_'+Global_info.timeout;
 		//alert(logInfo)
 		sendRequestPost('data',logInfo);
 		Global_info.start = Date.now();
