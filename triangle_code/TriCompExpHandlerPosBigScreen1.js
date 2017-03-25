@@ -272,9 +272,9 @@ function trainTriangle() {
 	var LengthBaseOrig=dimx*.9; //Max Base Length
 	var LengthAngleSideOrig=LengthBaseOrig*.1;
 	var AngleOrig=Math.PI/4; //Size of angle in radians - 45 deg
-	var height = Math.tan(AngleOrig)*.5*LengthBaseOrig;
 	var BaseLengthFactor=1; //Get the current percent of side length from Global_info.sideRunNum
 	var BaseLength=LengthBaseOrig*BaseLengthFactor;
+    var height = Math.tan(AngleOrig)*.5*BaseLength;
 
 	var TriBaseXStartOrig=dimx*.05; //Origin position in the X axis for maximal base length
 	var TriBaseXEndOrig=LengthBaseOrig+TriBaseXStartOrig; //End position of base for maximal base length
@@ -381,15 +381,17 @@ function drawTriangle() {
 	var LengthBaseOrig=dimx*.9; //Max Base Length
 	var LengthAngleSideOrig=LengthBaseOrig*.1;
 	var AngleOrig=TriBaseAngleArray[Math.floor(Global_info.angleRunNum%3)]; //Size of angle in radians - 45 deg
-	var height = Math.tan(AngleOrig)*.5*LengthBaseOrig;
 	var BaseLengthFactor=TriBaseLengthPerArray[Math.floor(Global_info.sideRunNum%5)]; //Get the current percent of side length from Global_info.sideRunNum
 	var BaseLength=LengthBaseOrig*BaseLengthFactor;
+    var height = Math.tan(AngleOrig)*.5*BaseLength;
 
 	var TriBaseXStartOrig=dimx*.05; //Origin position in the X axis for maximal base length
 	var TriBaseXEndOrig=LengthBaseOrig+TriBaseXStartOrig; //End position of base for maximal base length
 
 	var TriBaseXStart=TriBaseXStartOrig+0.5*(1-BaseLengthFactor)*LengthBaseOrig;
 	var TriBaseXEnd=TriBaseXStart+BaseLength;
+    // 
+
 	var TriBaseYPos=(dimy - height)*.5+height;
 
 	var TriSideXLengthIn=LengthAngleSideOrig*BaseLengthFactor;
