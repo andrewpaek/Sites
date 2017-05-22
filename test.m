@@ -6,7 +6,7 @@ try
     % Here we call some default settings for setting up Psychtoolbox
     PsychDefaultSetup(2);
     
-    geteye=0; %set to 1 to send info to eyelink
+    geteye=1; %set to 1 to send info to eyelink
     if geteye
         disp("working");
 %         filename=input('Input unique name for saving data in matlab:', 's');
@@ -46,7 +46,7 @@ try
     [xCenter, yCenter] = RectCenter(windowRect);
 
     % Setting up triangle dimensions
-    TriBaseLengthPerArray=[1, 0.75, 0.5, 0.25, 0.1];
+    TriBaseLengthPerArray=[1, 0.75, 0.5, 0.25, 0.04];
     TriBaseAngleArray = [pi/6, pi/5, pi/4];
     StrkWdth = 2;
 
@@ -69,7 +69,6 @@ try
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    
     if geteye
-%         disp("working");
         % Provide Eyelink with details about the graphics environment
         % and perform some initializations. The information is returned
         % in a structure that also contains useful defaults
@@ -151,31 +150,36 @@ try
 
 
         % Hide the mouse cursor;
-        Screen('HideCursorHelper', wp);
+%         Screen('HideCursorHelper', wp);
 
         % Calibrate the eye tracker
         EyelinkDoTrackerSetup(el);
         eye_used = Eyelink('EyeAvailable');
-    %     
-    %    % do a final check of calibration using driftcorrection
-    % %     EyelinkDoDriftCorrection(el);
-    %     
-    %     
-    %   
+
     end
-    % not too sure what this does
     topPriorityLevel = MaxPriority(window);
     Priority(topPriorityLevel);
-    for trial = 1:num_trials
+    start = 1;
+    % hit p to pause
+    pause_key = 19;
+    for trial = start:num_trials
         DrawFormattedText(window, ['Trial: ' num2str(trial) '. Drag the dot do the upper vertex of the triangle \n\n Press any key to begin'],... 
             'center', 'center', black);
-        Screen('Flip', window);      
-        KbStrokeWait;
+        Screen('Flip', window);
+        [secs, keyCode, deltaSecs] = KbStrokeWait;
+        
+        if keyCode(pause_key) == 1
+            DrawFormattedText(window, 'Paused. Hit any key to resume', 'center', 'center', black);
+            Screen('Flip', window);
+            KbStrokeWait;
+            EyelinkDoTrackerSetup(el);
+            eye_used = Eyelink('EyeAvailable');
+        end
         if geteye
             %%%%eyetracker
             %%%%stuff==============================================
             %%%%===================================================
-            % Send trial id message to Eyelink file
+            % Send trial id to Eyelink file
 
             % Sending a 'TRIALID' message to mark the start of a trial in Data 
             % Viewer.  This is different than the start of recording message 
@@ -238,34 +242,39 @@ try
         inside = 0;
         counter = 0;
         waitframes = 1; 
+        insta = 1;
+        
+        if insta==1
+            offset = 1;
+            dx = 0;
+            dy = 0;
+        end
         
         tic
         while ~KbCheck
 
             % Get the current position of the mouse
             [mx, my, buttons] = GetMouse(window);             
-
             
-
-            % See if the mouse cursor is inside the dot
-            if counter == 0
-                counter = 40;                 
-                if ((mx-dotXpos)^2+(my-dotYpos)^2 <= (dotSizePix/2)^2)
-                    inside = 1;
-                else
-                    inside = 0;
+            if insta == 0
+                if counter == 0
+                    counter = 80;
+                    if ((mx-dotXpos)^2+(my-dotYpos)^2 <= (dotSizePix/2)^2)
+                        inside = 1;
+                    else
+                        inside = 0;
+                    end
                 end
-            end 
-
+            else
+                inside = 1;
+            end
+            
             if inside==1 && sum(buttons) > 0 && offset == 0
                 dx = mx-dotXpos;
                 dy = my-dotYpos;
                 offset = 1;
-            end 
+            end
 
-            % If we are clicking on the square allow its position to be modified by
-            % moving the mouse, correcting for the offset between the centre of the
-            % square and the mouse position
             if inside == 1 && sum(buttons) > 0
                 dotXpos = mx - dx;
                 dotYpos = my - dy;
@@ -294,8 +303,8 @@ try
             % Flip to the screen          
             vbl  = Screen('Flip', window); 
 
-            if sum(buttons) <= 0
-                offsetSet = 0;
+            if sum(buttons) <= 0 && insta == 0
+                offset = 0;
             end
             counter = counter-1;
         end
@@ -310,9 +319,10 @@ try
             % stop the recording of eye-movements for the current trial
             Eyelink('StopRecording');
             
+            Eyelink('Message', ['Run Number: ' num2str(trial)]);
             Eyelink('Message', ['Dot positions: ' num2str(dotXpos) ', ' num2str(dotYpos)]);
-            Eyelink('Message', ['Triangle Angle: ' nums2str(AngleOrig)]);
-            Eyelink('Message', 'Triangle Base: %d', BaseLength);
+            Eyelink('Message', ['Triangle Angle: ' num2str(AngleOrig)]);
+            Eyelink('Message', ['Triangle Base: ' num2str(BaseLength)]);
             % Sending a 'TRIAL_RESULT' message to mark the end of a trial in 
             % Data Viewer. This is different than the end of recording message 
             % END that is logged when the trial recording ends. The viewer will
