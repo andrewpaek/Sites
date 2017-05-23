@@ -8,8 +8,6 @@ try
     
     geteye=1; %set to 1 to send info to eyelink
     if geteye
-        disp("working");
-%         filename=input('Input unique name for saving data in matlab:', 's');
         edf_filename=input('Input unique name for saving Eyelink data, only 8 or less letters and num allowed:', 's');
         edf_filename=strcat(edf_filename,'.edf');
     end
@@ -18,7 +16,6 @@ try
     % Get the screen numbers. This gives us a number for each of the screens
     % attached to our computer.
     screens = Screen('Screens');
-    disp(screens);
     % To draw we select the maximum of these numbers. So in a situation where we
     % have two screens attached to our monitor we will draw to the external
     % screen.                             
@@ -55,12 +52,14 @@ try
 
     TriBaseXStartOrig = screenXpixels*.05;
     TriBaseXEndOrig = LengthBaseOrig+TriBaseXStartOrig;
-    height = tan(pi/4)*.5*LengthBaseOrig;
+    height = tan(max(TriBaseAngleArray))*.5*LengthBaseOrig;
     TriBaseYPos = (screenYpixels-height)*.5+height;
 
     % New code here
     num_trials = 5;
-    timer = 5;  
+    
+    % Time given to user to complete task
+%     timer = 5;  
 
     
     
@@ -155,17 +154,18 @@ try
         % Calibrate the eye tracker
         EyelinkDoTrackerSetup(el);
         eye_used = Eyelink('EyeAvailable');
-
     end
+    
     topPriorityLevel = MaxPriority(window);
     Priority(topPriorityLevel);
-    start = 1;
     % hit p to pause
     pause_key = 19;
-    for trial = start:num_trials
+    for trial = 1:num_trials
         DrawFormattedText(window, ['Trial: ' num2str(trial) '. Drag the dot do the upper vertex of the triangle \n\n Press any key to begin'],... 
             'center', 'center', black);
+        
         Screen('Flip', window);
+        
         [secs, keyCode, deltaSecs] = KbStrokeWait;
         
         if keyCode(pause_key) == 1
@@ -175,6 +175,7 @@ try
             EyelinkDoTrackerSetup(el);
             eye_used = Eyelink('EyeAvailable');
         end
+        
         if geteye
             %%%%eyetracker
             %%%%stuff==============================================
@@ -197,8 +198,8 @@ try
              % mark zero-plot time in data file
             %%%%%%%%%%%%%%%%%%%%
             Eyelink('Message', 'SYNCTIME');
-                  
         end
+        
         cur_angle_index = randi([1, length(TriBaseAngleArray)]);
         cur_base_index = randi([1, length(TriBaseLengthPerArray)]);
 
@@ -208,22 +209,19 @@ try
 
 
         % Draw dot to be dragged
+
         dotColor = [0 1 0];
         dotXpos = 100;
         dotYpos = 100;
+        
+        
         dotSet = 0;
         
         % Make the dot size depend on the size of the triangle
-        if BaseLength < screenXpixels/2
-            dotSizeFactor = .0000065;
-        else
-            dotSizeFactor = .0000085;
-        end
+        dotSizeFactor = .0000085; % could be .0000065 if this is too big
 
         dotSizePix = screenYpixels*screenXpixels*dotSizeFactor;        
 %         Screen('DrawDots', window, [dotXpos dotYpos], dotSizePix, dotColor, [], 2);
-
-        ifi = Screen('GetFlipInterval', window);         
 
         % Set mouse position
         SetMouse(xCenter, yCenter, window);
@@ -238,10 +236,13 @@ try
         Screen('Drawlines', window, [TriBaseXStart, TriBaseXStart+TriSideXLengthIn; TriBaseYPos, TriBaseYPos-TriSideYLengthUp], StrkWdth);
         DrawFormattedText(window, ['After moving, hit any key to continue'], 'left', black);
         vbl = Screen('Flip', window);
+        
         offset = 0;
         inside = 0;
         counter = 0;
         waitframes = 1; 
+        
+        % Dot automically appears wherever mouse clicks
         insta = 1;
         
         if insta==1
@@ -383,6 +384,4 @@ catch
     ListenChar(0);
     Priority(0);
     rethrow(lasterror);
-%     commandwindow;
-%     psychrethrow(psychlasterror);
 end
