@@ -6,7 +6,7 @@ try
     % Here we call some default settings for setting up Psychtoolbox
     PsychDefaultSetup(2);
     
-    geteye=1; %set to 1 to send info to eyelink
+    geteye=0; %set to 1 to send info to eyelink
     if geteye
         edf_filename=input('Input unique name for saving Eyelink data, only 8 or less letters and num allowed:', 's');
         edf_filename=strcat(edf_filename,'.edf');
@@ -46,6 +46,8 @@ try
     TriBaseLengthPerArray=[1, 0.75, 0.5, 0.25, 0.04];
     TriBaseAngleArray = [pi/6, pi/5, pi/4];
     StrkWdth = 2;
+    basearr_length = length(TriBaseLengthPerArray);
+    anglearr_length = length(TriBaseAngleArray);
 
     LengthBaseOrig = screenXpixels*.9;
     LengthAngleSideOrig = LengthBaseOrig*.2;
@@ -56,7 +58,7 @@ try
     TriBaseYPos = (screenYpixels-height)*.5+height;
 
     % New code here
-    num_trials = 5;
+    num_trials = basearr_length*anglearr_length;
     
     % Time given to user to complete task
 %     timer = 5;  
@@ -200,11 +202,10 @@ try
             Eyelink('Message', 'SYNCTIME');
         end
         
-        cur_angle_index = randi([1, length(TriBaseAngleArray)]);
-        cur_base_index = randi([1, length(TriBaseLengthPerArray)]);
-
-        AngleOrig = TriBaseAngleArray(cur_angle_index);
-        BaseLengthFactor = TriBaseLengthPerArray(cur_base_index);
+        angle_index = mod(trial, anglearr_length)+1;
+        base_index = mod(trial, basearr_length)+1;
+        AngleOrig = TriBaseAngleArray(angle_index);
+        BaseLengthFactor = TriBaseLengthPerArray(base_index);
         BaseLength = LengthBaseOrig*BaseLengthFactor;
 
 
@@ -309,6 +310,7 @@ try
             end
             counter = counter-1;
         end
+        time = toc;
         
         if geteye
             %%%%eyetracker
@@ -323,7 +325,8 @@ try
             Eyelink('Message', ['Run Number: ' num2str(trial)]);
             Eyelink('Message', ['Dot positions: ' num2str(dotXpos) ', ' num2str(dotYpos)]);
             Eyelink('Message', ['Triangle Angle: ' num2str(AngleOrig)]);
-            Eyelink('Message', ['Triangle Base: ' num2str(BaseLength)]);
+            Eyelink('Message', ['Triangle Base: ' num2str(BaseLengthFactor)]);
+            Eyelink('Message', ['Time Taken: ', num2str(time)]);
             % Sending a 'TRIAL_RESULT' message to mark the end of a trial in 
             % Data Viewer. This is different than the end of recording message 
             % END that is logged when the trial recording ends. The viewer will
